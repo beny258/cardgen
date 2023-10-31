@@ -5,7 +5,42 @@ from unidecode import unidecode
 
 DEFAULT_INPUT_FILE_NAME = "cards.tsv"
 DEFAULT_INPUT_TABLE_NAME = "".join(DEFAULT_INPUT_FILE_NAME.split('.')[:-1])
+
 HEADER_ROWS_COUNT = 2
+INPUT_FORMAT = "nahcb__"
+# n = name
+# c = class
+# a = attack
+# h = health
+# b = ability (effect)
+# t = tribe
+# e = edition
+# _ = unused column
+
+
+def format_row(row):
+    name, card_class, attack, health, ability, tribe, edition = ""
+    row_list = list(row)
+    for i, mark in enumerate(INPUT_FORMAT):
+        if i >= len(row_list):
+            break
+        value = row_list[i]
+        if mark == 'n':
+            name = value
+        elif mark == 'c':
+            card_class = value
+        elif mark == 'a':
+            attack = value
+        elif mark == 'h':
+            health = value
+        elif mark == 'b':
+            ability = value
+        elif mark == 't':
+            tribe = value
+        elif mark == 'e':
+            edition = value
+    return name, card_class, attack, health, ability, tribe, edition
+    
 
 def create_svg_card(name, card_class, attack, health, ability, tribe, edition, table_name):
     # Set the size of the SVG card
@@ -50,6 +85,7 @@ def create_svg_card(name, card_class, attack, health, ability, tribe, edition, t
     # Save the SVG file
     dwg.save()
 
+
 def generate_svg_cards(csv_file):
     table_name = "".join(csv_file.split('.')[:-1])
     if table_name == "":  # in case input file has no sufix
@@ -60,12 +96,13 @@ def generate_svg_cards(csv_file):
         for _ in range(HEADER_ROWS_COUNT):
             next(card_reader)  # skip the header rows
         for row in card_reader:
-            name, attack, health, card_class, ability, _, _ = row
-            create_svg_card(name, card_class, attack, health, ability, "", "", table_name if table_name != DEFAULT_INPUT_TABLE_NAME else "")
+            name, card_class, attack, health, ability, tribe, edition = format_row(row)
+            create_svg_card(name, card_class, attack, health, ability, tribe, edition, table_name if table_name != DEFAULT_INPUT_TABLE_NAME else "")
             card_count += 1
     return card_count
 
-if __name__ == "__main__":
+
+def main():
     csv_database = [DEFAULT_INPUT_FILE_NAME]
     if (len(sys.argv) > 1):
         csv_database = sys.argv[1:]
@@ -73,3 +110,7 @@ if __name__ == "__main__":
     for csv_table in csv_database:
         generated_card_count += generate_svg_cards(csv_table)
     print("Generated", generated_card_count, "cards from total of", len(csv_database), "input files.")
+
+
+if __name__ == "__main__":
+    main()
