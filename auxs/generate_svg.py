@@ -3,7 +3,11 @@ import svgwrite
 import sys
 from unidecode import unidecode
 
-def create_svg_card(name, card_class, attack, health, ability, table_name):
+DEFAULT_INPUT_FILE_NAME = "cards.tsv"
+DEFAULT_INPUT_TABLE_NAME = "".join(DEFAULT_INPUT_FILE_NAME.split('.')[:-1])
+HEADER_ROWS_COUNT = 2
+
+def create_svg_card(name, card_class, attack, health, ability, tribe, edition, table_name):
     # Set the size of the SVG card
     card_width = 74  # mm
     card_height = 105   # mm
@@ -25,6 +29,8 @@ def create_svg_card(name, card_class, attack, health, ability, table_name):
     card_info = ""
     card_info += (" - " if card_info != "" and table_name != "" else "") + table_name
     card_info += (" - " if card_info != "" and card_class != "" else "") + card_class
+    card_info += (" - " if card_info != "" and edition != "" else "") + edition
+    card_info += (" - " if card_info != "" and tribe != "" else "") + tribe
     dwg.add(dwg.text(card_info, insert=(5, 45), fill='black', style=attribute_style))
 
     # Add attack and health information
@@ -46,19 +52,21 @@ def create_svg_card(name, card_class, attack, health, ability, table_name):
 
 def generate_svg_cards(csv_file):
     table_name = "".join(csv_file.split('.')[:-1])
+    if table_name == "":  # in case input file has no sufix
+        table_name = csv_file
     card_count = 0
     with open(csv_file, newline='', encoding='utf-8') as csvfile:
         card_reader = csv.reader(csvfile, delimiter='\t')
-        next(card_reader)  # Skip header row
-        next(card_reader)  # Skip second header row
+        for _ in range(HEADER_ROWS_COUNT):
+            next(card_reader)  # skip the header rows
         for row in card_reader:
             name, attack, health, card_class, ability, _, _ = row
-            create_svg_card(name, card_class, attack, health, ability, table_name if table_name != "karty" else "")
+            create_svg_card(name, card_class, attack, health, ability, "", "", table_name if table_name != DEFAULT_INPUT_TABLE_NAME else "")
             card_count += 1
     return card_count
 
 if __name__ == "__main__":
-    csv_database = ["cards.tsv"]
+    csv_database = [DEFAULT_INPUT_FILE_NAME]
     if (len(sys.argv) > 1):
         csv_database = sys.argv[1:]
     generated_card_count = 0
