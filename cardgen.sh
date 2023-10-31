@@ -18,15 +18,17 @@ echo "Version ${version}"
 echo "Needed packages: python3 (including library svgwrite), pdftk, inkscape"
 echo "Use option -n for keeping the temporary files."
 echo "Default input file name is 'cards.tsv'. Add arguments to change that."
-echo "--------------------------------------------------------------"
 
 if [ $showonlyhelp = false ]; then
-    mkdir -p cards_aux
+    echo "--------------------------------------------------------------"
+    
+    cd auxs
+    mkdir -p cards_svg
 
     echo "Generating SVG files."
-    python3 generovani.py $@
+    python3 generate_svg.py $@
 
-    cd cards_aux
+    cd cards_svg
 
     echo "Converting to PDF."
     inkscape -b "#ffffff" --export-type="pdf" `find z_*`
@@ -38,8 +40,10 @@ if [ $showonlyhelp = false ]; then
 
     if [ $removeauxfiles = true ]; then
         echo "Deleting auxiliary files."
-        rm -rf cards_aux
+        rm -rf cards_svg
     fi
+
+    cd ..
 
     echo "Done."
 fi
