@@ -11,7 +11,7 @@ def create_svg_card(name, card_class, attack, health, ability, table_name):
     # Create a new SVG drawing
     normalized_name = unidecode(name.replace(" ", "_"))
     normalized_table_name = unidecode(table_name.replace(" ", "_"))
-    dwg = svgwrite.Drawing(filename=f"karty_aux/z_{normalized_table_name}_{normalized_name}.svg", size=(f"{card_width}mm", f"{card_height}mm"))
+    dwg = svgwrite.Drawing(filename=f"cards_aux/z_{normalized_table_name}_{normalized_name}.svg", size=(f"{card_width}mm", f"{card_height}mm"))
 
     # Define styles for text and other elements
     title_style = "font-size: 12pt; font-weight: bold;"
@@ -58,7 +58,7 @@ def generate_svg_cards(csv_file):
     return card_count
 
 if __name__ == "__main__":
-    csv_database = ["karty.tsv"]
+    csv_database = ["cards.tsv"]
     if (len(sys.argv) > 1):
         csv_database = sys.argv[1:]
     generated_card_count = 0

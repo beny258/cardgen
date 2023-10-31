@@ -1,4 +1,4 @@
-version=1.1a
+version=1.1
 
 removeauxfiles=true
 showonlyhelp=false
@@ -17,16 +17,16 @@ echo "Script for card generation."
 echo "Version ${version}"
 echo "Needed packages: python3 (including library svgwrite), pdftk, inkscape"
 echo "Use option -n for keeping the temporary files."
-echo "Default input file name is 'karty.tsv'. Add arguments to change that."
+echo "Default input file name is 'cards.tsv'. Add arguments to change that."
 echo "--------------------------------------------------------------"
 
 if [ $showonlyhelp = false ]; then
-    mkdir -p karty_aux
+    mkdir -p cards_aux
 
     echo "Generating SVG files."
     python3 generovani.py $@
 
-    cd karty_aux
+    cd cards_aux
 
     echo "Converting to PDF."
     inkscape -b "#ffffff" --export-type="pdf" `find z_*`
@@ -38,7 +38,7 @@ if [ $showonlyhelp = false ]; then
 
     if [ $removeauxfiles = true ]; then
         echo "Deleting auxiliary files."
-        rm -rf karty_aux
+        rm -rf cards_aux
     fi
 
     echo "Done."
