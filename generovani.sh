@@ -1,4 +1,4 @@
-version=1.0a
+version=1.1a
 
 removeauxfiles=true
 showonlyhelp=false
@@ -11,33 +11,35 @@ do
     esac
 done
 
-echo "Skript pro generování karet pro hru Stezkoversum."
-echo "Verze ${version}"
-echo "Nutné balíčky: python3 (s knihovnou svgwrite), pdftk, inkscape"
-echo "Použijte možnost -n pro zachování pomocných souborů."
-echo "Název vstupního CSV souboru musí být karty.csv."
+shift $((OPTIND-1))
+
+echo "Script for card generation."
+echo "Version ${version}"
+echo "Needed packages: python3 (including library svgwrite), pdftk, inkscape"
+echo "Use option -n for keeping the temporary files."
+echo "Default input file name is 'karty.tsv'. Add arguments to change that."
 echo "--------------------------------------------------------------"
 
 if [ $showonlyhelp = false ]; then
     mkdir -p karty_aux
 
-    echo "Generuji SVG karty."
-    python3 generovani.py
+    echo "Generating SVG files."
+    python3 generovani.py $@
 
     cd karty_aux
 
-    echo "Převádím do PDF."
+    echo "Converting to PDF."
     inkscape -b "#ffffff" --export-type="pdf" `find z_*`
 
-    echo "Sjednocuji do jediného souboru."
-    pdftk `find *.pdf` cat output ../karty.pdf
+    echo "Combining to a single file."
+    pdftk `find *.pdf` cat output ../output.pdf
 
     cd ..
 
     if [ $removeauxfiles = true ]; then
-        echo "Mažu pomocné soubory."
+        echo "Deleting auxiliary files."
         rm -rf karty_aux
     fi
 
-    echo "Hotovo. Soubor karty.pdf vygenerován."
+    echo "Done."
 fi
