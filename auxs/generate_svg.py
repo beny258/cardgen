@@ -19,7 +19,7 @@ INPUT_FORMAT = "nahcb__"
 
 
 def format_row(row):
-    name, card_class, attack, health, ability, tribe, edition = ""
+    name, card_class, attack, health, ability, tribe, edition = "", "", "", "", "", "", ""
     row_list = list(row)
     for i, mark in enumerate(INPUT_FORMAT):
         if i >= len(row_list):
@@ -91,7 +91,7 @@ def generate_svg_cards(csv_file):
     if table_name == "":  # in case input file has no sufix
         table_name = csv_file
     card_count = 0
-    with open(csv_file, newline='', encoding='utf-8') as csvfile:
+    with open("../" + csv_file, newline='', encoding='utf-8') as csvfile:
         card_reader = csv.reader(csvfile, delimiter='\t')
         for _ in range(HEADER_ROWS_COUNT):
             next(card_reader)  # skip the header rows

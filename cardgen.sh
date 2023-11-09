@@ -34,7 +34,7 @@ if [ $showonlyhelp = false ]; then
     inkscape -b "#ffffff" --export-type="pdf" `find z_*`
 
     echo "Combining to a single file."
-    pdftk `find *.pdf` cat output ../output.pdf
+    pdftk `find *.pdf` cat output ../../output.pdf
 
     cd ..
 
