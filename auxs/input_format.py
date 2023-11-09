@@ -1,0 +1,10 @@
+HEADER_ROWS_COUNT = 2       # number of header rows to skip
+INPUT_FORMAT = "nahcb__"    # columns of the input table
+# n = name
+# c = class
+# a = attack
+# h = health
+# b = ability (effect)
+# t = tribe
+# e = edition
+# _ = unused column

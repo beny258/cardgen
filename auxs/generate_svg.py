@@ -2,21 +2,10 @@ import csv
 import svgwrite
 import sys
 from unidecode import unidecode
+from input_format import *
 
 DEFAULT_INPUT_FILE_NAME = "cards.tsv"
 DEFAULT_INPUT_TABLE_NAME = "".join(DEFAULT_INPUT_FILE_NAME.split('.')[:-1])
-
-HEADER_ROWS_COUNT = 2
-INPUT_FORMAT = "nahcb__"
-# n = name
-# c = class
-# a = attack
-# h = health
-# b = ability (effect)
-# t = tribe
-# e = edition
-# _ = unused column
-
 
 def format_row(row):
     name, card_class, attack, health, ability, tribe, edition = "", "", "", "", "", "", ""
